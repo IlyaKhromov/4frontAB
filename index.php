@@ -1,3 +1,10 @@
+<?php session_start(); ?>
+<?php
+    $statusMsg = !empty($_SESSION['msg'])?$_SESSION['msg']:'';
+    unset($_SESSION['msg']);
+    echo $statusMsg;
+?>
+
 <!doctype html>
 <html>
 	<head>
@@ -43,14 +50,6 @@
 		    </div>
 		</header>
 		
-	
-			<?php session_start(); // place it on the top of the script ?>
-			<?php
-			    $statusMsg = !empty($_SESSION['msg'])?$_SESSION['msg']:'';
-			    unset($_SESSION['msg']);
-			    echo $statusMsg;
-			?>
-	
 		<section class="s-form"> 
 			<div class="container">
 	    		<div class="row">
@@ -58,9 +57,7 @@
 						<div class="bl-form well">
 
 							<form name="form" action="action.php" method="POST">
-								<!-- <input type="hidden" name="u" value="39f1a07c8d7d0e966c98a823d">
-												    			<input type="hidden" name="id" value="8690e84785"> -->
-								
+															
 								<div class="form-header">
 									<h3>Register product</h3>
 									<p>* Indicates a required field</p>
@@ -81,29 +78,30 @@
 								</div>
 
 								<div class="form-group">
-									<label for="MERGE3">Birthday *</label>
+									<label for="MERGE3">Birthday (MM/DD) *</label>
 									<input type="text" class="form-control" name="MERGE3" id="MERGE3" placeholder="MM/DD" required>
 								</div>
 
 								<div class="form-group">
-									<label for="MERGE4">Product Code *</label>
-									<input type="text" class="form-control" name="MERGE4" id="MERGE4" placeholder="abc123456" required>
+									<label for="MERGE4">Product Code (3 letters, 6 numbers) *</label>
+									<input type="text" class="form-control" name="MERGE4" id="MERGE4" placeholder="abc123456" required pattern="[a-zA-Z]{3}[0-9]{6}" title="Product Code should consist of 9 characters (first 3 should be letters, other 6 - numbers)"  onchange="validateProductcode()">
 								</div>
 
 								<div class="form-group">
 									<label for="MERGE5">Country *</label>
-									<select class="form-control" name="MERGE5" id="MERGE5" required>
-										<option value="Austria">Austria</option>
-										<option value="Belgium">Belgium</option>
-										<option value="Denmark">Denmark</option>
-										<option value="Finland">Finland</option>
-										<option value="France">France</option>
-										<option value="Germany">Germany</option>
-										<option value="Ireland">Ireland</option>
-										<option value="Sweden">Sweden</option>
-										<option value="United Kingdom">United Kingdom</option>
-										<option value="Ukraine">Ukraine</option>
-									</select>
+									<input list="countries" class="form-control" name="MERGE5" id="MERGE5" required>
+									<datalist id="countries">
+										<option value="Austria">
+										<option value="Belgium">
+										<option value="Denmark">
+										<option value="Finland">
+										<option value="France">
+										<option value="Germany">
+										<option value="Ireland">
+										<option value="Sweden">
+										<option value="United Kingdom">
+										<option value="Ukraine">
+									</datalist>
 								</div>
 
 								<div class="form-group">
@@ -202,7 +200,21 @@
 
 		<script src="scripts/jquery-1.11.3.min.js"></script>
 		<script src="scripts/bootstrap.min.js"></script>
-		<script src="scripts/core.js"></script>
+
+		<script type="text/javascript">
+			function validateProductcode() {
+
+				var productCode = document.getElementById('MERGE4').value;
+				var regexp1 = /^[a-zA-Z]{3}[0-9]{6}/;
+				var productCodeResult = regexp1.test(productCode);
+
+				if(productCodeResult == false){
+					alert("Product Code should consist of 9 characters (first 3 should be letters, other 6 - numbers)");
+					return false;
+				}
+				return true;
+			}	
+		</script>
 	</body>
 </html>	
 
